@@ -1,17 +1,18 @@
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.util.Scanner;
-
 /**
  * Proxy to the actual Model on the server.
  *
  * @author Jenny Zhen
- * date: 02.20.14  * language: Java
- * file: Fiftee.java
+ * date: 02.20.14
+ * language: Java
+ * file: FifteenModelProxy.java
  * assignment: Fifteen
  * http://www.cs.rit.edu/~wrc/courses/csci251/projects/3/
  */
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class FifteenModelProxy implements Runnable{
     private Socket socket; // connection to the server
