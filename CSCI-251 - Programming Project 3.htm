@@ -1,0 +1,713 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+  <title>CSCI-251 - Programming Project 3</title>
+  <link rel="stylesheet" type="text/css" href="CSCI-251%20-%20Programming%20Project%203_files/de.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta name="robots" content="nofollow,noarchive">
+</head>
+<body>
+
+<h1>CSCI-251 - Programming Project 3</h1>
+
+<h2>Due:
+Sunday, April 27, 2014
+
+</h2>
+
+<p>
+<em>
+Last updated
+2014/04/15 09:39:58
+
+</em>
+</p>
+
+<p><em>Update history:</em></p>
+
+<table>
+
+<tbody><tr>
+   <td><code>2014/04/15:</code></td>
+   <td><code>clarified message format, section 3.3</code></td>
+</tr>
+
+<tr>
+   <td><code>2014/04/12:</code></td>
+   <td><code>corrected incorrect file name, section 5</code></td>
+</tr>
+
+<tr>
+   <td><code>2014/04/09:</code></td>
+   <td><code>initial version</code></td>
+</tr>
+
+</tbody></table>
+
+<hr>
+
+<ol>
+<li><a href="#intro">Introduction</a>
+</li><li><a href="#over">Overview</a>
+</li><li><a href="#details">Program Requirements</a>
+</li><li><a href="#files">Supplied Files</a>
+</li><li><a href="#submit">Turning In Your Solution</a>
+</li><li><a href="#grading">Grading</a>
+</li><li><a href="#notes">Notes</a>
+</li></ol>
+
+<hr>
+
+<a name="intro"></a>
+<h2>1. Introduction</h2>
+
+<p>
+For this assignment, you will write a Java program that functions as the
+client side of a client-server system.
+The goal of this assignment is to help you learn about network
+programming with sockets.
+</p>
+
+<hr>
+
+<a name="over"></a>
+<h2>2. Overview</h2>
+
+<p>
+In the game of Fifteen,
+two players take turns
+picking a number from 1 to 9.
+Each number can only be picked once.
+Each player's score is the sum of the numbers
+the player has picked.
+The game ends when one player's score is exactly 15;
+that player wins.
+Otherwise, the game ends in a draw
+when all numbers have been picked.
+</p>
+
+<p>
+For example, here is a sequence of moves by players Alice and Bob:
+</p>
+
+<blockquote>
+Alice picks 4; her score is 4.<br>
+Bob picks 1; his score is 1.<br>
+Alice picks 5; her score is 9.<br>
+Bob picks 2; his score is 3.<br>
+Alice picks 6; her score is 15.<br>
+Alice wins!
+</blockquote>
+
+<hr>
+
+<a name="details"></a>
+<h2>3. Program Requirements</h2>
+
+<h3>3.1. Network Game</h3>
+
+<p>
+For this project you will implement the <em>client program</em>
+for a Fifteen client-server network application.
+(You will not implement the server program.)
+The network application uses TCP sockets for communication,
+with the protocol described below.
+The network application is a multi-session multi-client application;
+the server supports any number of simultaneous sessions, with each
+session consisting of two players (clients) playing against each other.
+The server does not participate in the game — it is just a
+glorified game board.
+</p>
+
+<p>
+The client program is run with this command:
+</p>
+
+<blockquote><pre>java Fifteen <em>playername</em> <em>host</em> <em>port</em>
+</pre></blockquote>
+
+<p>
+When a client starts up, it sets up a socket connection to the server
+at the given <code><em>host</em></code> and <code><em>port</em></code>.
+If the server has no sessions, or if every existing session already
+has two players, the server creates a new session and adds the client to
+that session; the client then waits to start playing until another client
+joins the session.
+Otherwise, the server has a session with one waiting client,
+and the server adds the client to that session;
+the two clients then start playing each other.
+</p>
+
+<p>
+The server keeps track of whose turn it is; only that player
+is allowed to pick a number.
+The server also keeps track of each player's score
+and detects when one player wins or the game is a draw.
+</p>
+
+<h3>3.2. Client GUI</h3>
+
+<p>
+The client's graphical user interface looks like this:
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig01.png" alt="client GUI">
+</blockquote>
+
+<p>
+The window's title is
+</p>
+
+<blockquote><code>
+Fifteen -- <em>name</em>
+</code></blockquote>
+
+<p>
+where <code><em>name</em></code> is replaced with the player's name.
+At the left are nine buttons
+for picking each of the numbers 1 through 9.
+At the top right are three text boxes.
+The upper text box displays this player's name and score.
+The middle text box displays the opponent's name and score.
+The lower text box displays who won the game, or whether the game was
+a draw; until the game ends, this box is blank.
+At the bottom right is a button for starting a new game
+between the same two players.
+</p>
+
+<p>
+Partial (i.e., incomplete) code for the client GUI has been provided by
+Professor Kaminsky; see the <a href="#files"><em>Supplied Files</em></a>
+section (below) for details on how to download it.
+When you write the client program, you must add any necessary code to the
+UI class, and the modified UI class must be submitted as part of your
+solution.
+</p>
+
+<p>
+Here is an example game session between Alice and Bob,
+showing what appears on each player's GUI.
+The server is running on localhost port 5678.
+Alice begins the game by typing this command:
+</p>
+
+<blockquote><pre>java Fifteen Alice localhost 5678
+</pre></blockquote>
+
+<p>
+Alice's GUI window appears.
+Because Alice is the first player in this session, all buttons are
+disabled; the first text box says just "Alice",
+the second text box says "Waiting for partner", and
+the third text box is blank.
+(If she changes her mind,
+at this point Alice can close the window,
+and the game session terminates.)
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig02.png" alt="initial GUI for Alice">
+</blockquote>
+
+<p>
+Next, Bob joins the session by typing this command:
+
+</p><blockquote><pre>java Fifteen Bob localhost 5678
+</pre></blockquote>
+
+<p>
+Bob's GUI window appears.
+As there are now two players, both GUI windows
+show Alice's and Bob's initial scores of 0.
+Note that the player's own name and score
+appear in the first text box,
+and the opponent's name and score
+appear in the second text box.
+In Alice's window, the number buttons are enabled,
+signifying that it's her turn; in Bob's window,
+the number buttons are disabled, signifying that it's not his turn.
+(The first player in the game session
+always takes the first turn.)
+In both windows, the New Game button is enabled.
+If either player clicks this button at any point,
+a new game starts,
+and both windows go back to this initial state.
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig03a.png" alt="Alice's GUI">&nbsp;&nbsp;&nbsp;&nbsp;<img src="CSCI-251%20-%20Programming%20Project%203_files/fig03b.png" alt="Bob's GUI">
+</blockquote>
+
+<p>
+Alice clicks the 4 button.
+In <em>both</em> windows, the 4 button becomes blank and is disabled,
+preventing either player from picking 4 again.
+Alice's new score shows in both windows.
+In Bob's window, the number buttons are now enabled
+(except the 4 button),
+signifying that it's his turn.
+In Alice's window, the number buttons are now disabled,
+signifying that it's not her turn.
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig04a.png" alt="Alice's GUI">&nbsp;&nbsp;&nbsp;&nbsp;<img src="CSCI-251%20-%20Programming%20Project%203_files/fig04b.png" alt="Bob's GUI">
+</blockquote>
+
+<p>
+Bob clicks the 9 button.
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig05a.png" alt="Alice's GUI">&nbsp;&nbsp;&nbsp;&nbsp;<img src="CSCI-251%20-%20Programming%20Project%203_files/fig05b.png" alt="Bob's GUI">
+</blockquote>
+
+<p>
+To prevent Bob from winning on the next turn,
+Alice clicks the 6 button.
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig06a.png" alt="Alice's GUI">&nbsp;&nbsp;&nbsp;&nbsp;<img src="CSCI-251%20-%20Programming%20Project%203_files/fig06b.png" alt="Bob's GUI">
+</blockquote>
+
+<p>
+Bob isn't paying attention
+and clicks the 1 button.
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig07a.png" alt="Alice's GUI">&nbsp;&nbsp;&nbsp;&nbsp;<img src="CSCI-251%20-%20Programming%20Project%203_files/fig07b.png" alt="Bob's GUI">
+</blockquote>
+
+<p>
+Alice clicks the 5 button and wins the game.
+In both windows,
+the lower text field displays "Alice wins!",
+the number buttons are disabled,
+and the New Game button is enabled.
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%203_files/fig08a.png" alt="Alice's GUI">&nbsp;&nbsp;&nbsp;&nbsp;<img src="CSCI-251%20-%20Programming%20Project%203_files/fig08b.png">
+</blockquote>
+
+<p>
+If Bob had won,
+the lower text field would have displayed "Bob wins!";
+if the game had been a draw,
+the lower text field would have displayed "Draw!".
+</p>
+
+<p>
+If either player clicks the New Game button (at any point),
+a new game starts,
+and both windows go back to the initial state shown above.
+</p>
+
+<p>
+If either player closes the window (at any point),
+the game session terminates,
+the other player's window closes as well,
+and both client programs terminate.
+</p>
+
+<h3>3.3. Protocol</h3>
+
+<p>
+The client and server exchange messages encoded using a text-based
+protocol over the socket connection.
+Some messages consist of just a command word, while others take one or
+more arguments.
+Every message ends with a newline character; those messages which have
+arguments (e.g., <code>join</code>, <code>name</code>, etc.)
+should have at least one space character between fields
+in the message.
+</p>
+
+<h4>3.3.1 Client-to-Server Messages</h4>
+
+<p>
+The following messages are sent by each client to the server:
+</p>
+
+<ul>
+
+<li>
+<p>
+<code>join <em>n</em></code><br>
+Sent when the client starts up; <code><em>n</em></code> is replaced with
+the player's name.
+</p>
+
+</li><li>
+<p>
+<code>digit <em>d</em></code><br>
+Sent when the player clicks a number button; <code><em>d</em></code>
+is replaced with the number (1 to 9).
+</p>
+
+</li><li>
+<p>
+<code>newgame</code><br>
+Sent when the player clicks the New Game button.
+</p>
+
+</li><li>
+<p>
+<code>quit</code><br>
+Sent when the player closes the window.
+</p>
+
+</li></ul>
+
+<h4>3.3.2 Server-to-Client Messages</h4>
+
+<p>
+The following messages are sent from the server to all clients connected
+to the session:
+</p>
+
+<ul>
+
+<li>
+<p>
+<code>id <em>i</em></code><br>
+Sent when the client joins the game session; <code><em>i</em></code> is
+replaced with the player's ID.
+The first player to join gets ID 1; the second gets ID 2.
+</p>
+
+</li><li>
+<p>
+<code>name <em>i</em> <em>n</em></code><br>
+Sent to report one of the player's names; <code><em>i</em></code> is
+replaced with the ID of the player whose name is being reported, and
+<code><em>n</em></code> is replaced with that player's name.
+</p>
+
+</li><li>
+<p>
+<code>digits <em>aaaaaaaaa</em></code><br>
+Sent to report which numbers are available to be picked;
+<code><em>aaaaaaaaa</em></code> is replaced with a nine-character
+sequence of 0 and 1 characters corresponding to the numbers 1 through 9.
+Each character is a 0 if the corresponding number is not available, or is
+a 1 if the corresponding number is available; for example, if numbers 2,
+4, and 7 are available, the string would be <code>010100100</code>.
+</p>
+
+</li><li>
+<p>
+<code>score <em>i</em> <em>s</em></code><br>
+Sent to report one of the player's scores; <code><em>i</em></code> is
+replaced with the ID of the player whose score is being reported, and
+<code><em>s</em></code> is replaced with that player's score.
+</p>
+
+</li><li>
+<p>
+<code>turn <em>i</em></code><br>
+Sent to report which player's turn it is; <code><em>i</em></code> is
+replaced with the ID of the player whose turn it is.
+If the game is over (win or draw), <code><em>i</em></code> is 0.
+</p></li><li>
+<p>
+<code>win <em>i</em></code><br>
+Sent to report which player has won the game; <code><em>i</em></code> is
+replaced with the ID of the winning player.
+If the game was a draw, <code><em>i</em></code> is 0.
+</p>
+
+</li><li>
+<p>
+<code>quit</code><br>
+Sent to report that the game session has terminated.
+</p>
+
+</li></ul>
+
+<h3>3.4. Reference Server</h3>
+
+<p>
+To help you develop your client program, Professor Kaminsky has
+written a server program that implements the server side of the above
+protocol.
+See the
+<a href="#files"><em>Supplied Files</em></a> section (below) for details
+on how to download the server.
+</p>
+
+<p>
+The server program prints messages that tell when sessions are created
+and removed and that tell when messages are sent and received.
+Here is an example of the sequence of messages printed when Alice
+connects to the server from localhost port 25111 and Bob then connects
+to the server from localhost port 25222.
+(IP address 127.0.0.1 is the shorthand name for the local host; arrows
+pointing to the right are messages sent from clients to the server, while
+arrows pointing to the left are messages sent from the server to
+clients.)
+</p>
+
+<blockquote><pre>/127.0.0.1:25111 --&gt; join Alice
+/127.0.0.1:25111 &lt;-- id 1
+/127.0.0.1:25111 &lt;-- name 1 Alice
+/127.0.0.1:25222 --&gt; join Bob
+/127.0.0.1:25111 &lt;-- name 2 Bob
+/127.0.0.1:25222 &lt;-- id 2
+/127.0.0.1:25222 &lt;-- name 2 Bob
+/127.0.0.1:25222 &lt;-- name 1 Alice
+/127.0.0.1:25111 &lt;-- digits 111111111
+/127.0.0.1:25111 &lt;-- score 1 0
+/127.0.0.1:25111 &lt;-- score 2 0
+/127.0.0.1:25222 &lt;-- digits 111111111
+/127.0.0.1:25222 &lt;-- score 1 0
+/127.0.0.1:25222 &lt;-- score 2 0
+/127.0.0.1:25111 &lt;-- turn 1
+/127.0.0.1:25222 &lt;-- turn 1
+</pre></blockquote>
+
+<p>
+This server must be executed using JDK 1.7.
+To run the server, ensure that the <code>server.jar</code> file is in
+your <code>CLASSPATH</code> environment variable and that the JDK 1.7
+binary directory is on your search path.
+For Bash users, these commands will do this:
+</p>
+
+<blockquote><pre>export PATH=/usr/local/dcs/jdk/bin:$PATH
+export CLASSPATH=.:./server.jar
+</pre></blockquote>
+
+<p>
+For Csh users, use these commands:
+</p>
+
+<blockquote><pre>setenv PATH /usr/local/dcs/jdk/bin:$PATH
+setenv CLASSPATH .:./server.jar
+</pre></blockquote>
+
+<p>
+To run the server, after setting <code>CLASSPATH</code> and
+<code>PATH</code> as necessary, use this command:
+</p>
+
+<blockquote><pre>java FifteenServer <em>host</em> <em>port</em>
+</pre></blockquote>
+
+<p>
+You are only allowed to <strong>run</strong> this server;
+You are <strong><em>not</em></strong> allowed
+to examine, list, dump, disassemble, reverse-engineer,
+or do anything else with the server.
+</p>
+
+<h3>3.5. Design</h3>
+
+<p>
+The client program must be a class named <code>Fifteen</code>, and
+must be run with this command line:
+</p>
+
+<blockquote><pre>java Fifteen <em>playername</em> <em>host</em> <em>port</em>
+</pre></blockquote>
+
+<p>
+where
+<code><em>playername</em></code> is the name of the player
+(which must not include any whitespace),
+<code><em>host</em></code> is the host name or IP address of the
+server, and <code><em>port</em></code> is the port number of the server.
+</p>
+
+<p>
+If the command line does not have the required number of arguments, or
+if any argument is invalid, the client program must print an appropriate
+usage message on the standard error output and must terminate.
+The wording of the message is up to you.
+</p>
+
+<p>
+If the client program cannot connect to the server at the given host and
+port, or if any other error condition occurs, the client program must
+print an appropriate error message on the standard error output and must
+terminate.
+Again, the wording of the message is up to you.
+</p>
+
+<p>
+The client program must display and operate the graphical user interface
+specified above under <em>Client GUI</em>.
+</p>
+
+<p>
+The client program must communicate with the server
+using the protocol specified above under <em>Protocol</em>.
+</p>
+
+<p>
+The client must not print anything on the standard output.
+</p>
+
+<p>
+If you are not sure what the client is supposed to do in any particular
+situation, send me email; I will respond, and will put a copy of my
+response in the "questions on this assignment" page (linked from the
+course <a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/assignments.shtml#projects">
+<em>Assignments</em></a> page).
+</p>
+
+<p>
+The client program must follow the network programming patterns studied
+in class (MVC, Observer, Network Proxy, etc.), and must be
+designed using object-oriented design principles as appropriate.
+It must also make use of reusable software components as appropriate.
+</p>
+
+<p>
+Each class or interface must include a Javadoc comment
+describing the overall class or interface.
+</p>
+
+<p>
+Each method within each class or interface must include a Javadoc comment
+describing the overall method, the arguments if any, the return value if
+any, and the exceptions thrown if any.
+(See the Java source file examples available via the course
+<a href="http://www.cs.rit.edu/%7Ewrc/courses/common/csci251/links.shtml"> <em>Resources</em></a>
+page for examples of the style of Javadoc comments I'm looking for.)
+</p>
+
+<hr>
+
+<a name="files"></a>
+<h2>4. Supplied Files</h2>
+
+<p>
+For testing purposes, a partial GUI implementation and a sample server
+are available to you.
+To retrieve them, on a CS Ubuntu<sup><a href="#ftn">®</a></sup>
+system, execute the following command:
+</p>
+
+<blockquote><pre>get  wrc  cpds-3
+</pre></blockquote>
+
+<p>
+Alternatively, you can download the
+<a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/projects/3/FifteenView.java"><code>FifteenView.java</code></a> and
+<a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/projects/3/server.jar"><code>server.jar</code></a>
+files directly.
+</p>
+
+<hr>
+
+<a name="submit"></a>
+<h2>5. How to Submit your Solution</h2>
+
+<p>
+Unlike previous assignments, your code will not be tested at the time you
+submit it; it will only be compiled to ensure that it is complete.
+To submit your solution, on the CS Ubuntu systems, use this command:
+</p>
+
+<blockquote>
+<code>try  wrc-grd  cpds-3  </code>  <em>files</em>
+</blockquote>
+
+<p>
+where <em>files</em> are the names of all the <code>.java</code>
+files implementing your solution (one of which must be named
+<code>Fifteen.java</code>).
+You may also submit a <code>README</code> file if you wish to communicate
+additional information that I should know before grading your program.
+</p>
+
+<p>
+The minimum acceptance test is that your code must be complete - that is,
+it must compile cleanly when submitted.
+Submissions <em>will not be accepted</em> if they fail to compile cleanly.
+(Warning messages from the compiler are acceptable, but not fatal errors.)
+</p>
+
+<hr>
+
+<a name="grading"></a>
+<h2>6. Grading</h2>
+
+<p>
+Your submission will be graded out of 50 points as follows:
+</p>
+
+<blockquote>
+<table cellpadding="3" border="1">
+
+<tbody><tr>
+ <th>Criterion</th><th>Value</th><th>Interpretation</th>
+</tr>
+
+<tr>
+ <td>Performance</td><td>35 points</td>
+ <td>How well your program's output meets the performance requirements
+described above</td>
+</tr>
+
+<tr>
+ <td>Design</td><td>15 points</td>
+ <td>How well your program meets the design requirements described above</td>
+</tr>
+
+</tbody></table>
+</blockquote>
+
+<hr>
+
+<a name="notes"></a>
+<h2>7. Notes</h2>
+
+<p>
+Remember that you must use JDK 1.7 to compile and run your program.
+This means that you must modify your shell <code>PATH</code> and
+<code>CLASSPATH</code> environment variables.
+Example commands to do this are shown above.
+You can either execute these commands in each shell window, or you can
+modify your shell configuration files (<code>.bashrc</code> and
+<code>.bash_profile</code> for <code>bash</code>, <code>.cshrc</code> and
+<code>.login</code> for <code>csh</code>) to automatically set these
+variables in every shell you start up.
+<em>Note:</em>
+only shells you start up after you modify the configuration
+file(s) will have the new configuration - shells already running won't be
+affected.
+</p>
+
+<p>
+Late submissions will be graded only if you requested an extension before
+the deadline for submitting the assignment.
+See the <a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/syllabus/">course syllabus</a> for
+a description of the extension policy.
+</p>
+
+<p>
+The specification for output produced by your program is exact.
+Any deviation (e.g., extra spaces, debugging messages in the output,
+etc.) will be considered to be incorrect output.
+</p>
+
+<p>
+Refer to the example programs we have studied in class for examples of
+reasonable programming style, or to the coding style recommendations
+linked from the
+<a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/syllabus/">course syllabus</a>.
+</p>
+
+<hr>
+<a name="ftn"></a>
+<em>
+Ubuntu<sup>®</sup> is a registered trademark of Canonical Ltd.
+
+</em>
+
+
+</body></html>
