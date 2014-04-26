@@ -11,11 +11,12 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class FifteenView
-	extends JFrame
+	extends JFrame implements FifteenModelListener
 	{
 
 	private static final int GAP = 10;
 	private static final int COLS = 12;
+    private int ID;
 
 	/**
 	 * Class DigitButton provides a button labeled with a digit.
