@@ -1,14 +1,15 @@
-import java.awt.Dimension;
-import java.awt.event.*;
-import javax.swing.*;
-
 /**
  * Class FifteenView provides the user interface for the Fifteen network game.
  *
  * @author  Alan Kaminsky
- * @author  YOUR NAME HERE
+ * @author  Jenny Zhen
  * @version 16-Mar-2014
  */
+
+import java.awt.Dimension;
+import java.awt.event.*;
+import javax.swing.*;
+
 public class FifteenView
 	extends JFrame
 	{
