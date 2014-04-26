@@ -13,7 +13,7 @@ import java.util.Scanner;
  * http://www.cs.rit.edu/~wrc/courses/csci251/projects/3/
  */
 
-public class FifteenModelProxy {
+public class FifteenModelProxy implements Runnable{
     private Socket socket; // connection to the server
     private Scanner in; // server-to-client messages
     private PrintStream out; // client-to-server messages
@@ -87,6 +87,40 @@ public class FifteenModelProxy {
             System.err.println(
                     "Error: Connection to the given host and port failed.");
             System.exit(0);
+        }
+    }
+
+    @Override
+    public void run() {
+        while(in.hasNextLine()) {
+            String line = in.nextLine();
+            String[] message = line.split(" ");
+
+            if(message[0].equals("id")) {
+            }
+            else if(message[0].equals("name")) {
+
+            }
+            else if(message[0].equals("digits")) {
+
+            }
+            else if(message[0].equals("score")) {
+
+            }
+            else if(message[0].equals("turn")) {
+
+            }
+            else if(message[0].equals("win")) {
+
+            }
+            else if(message[0].equals("quit")) {
+
+            }
+            else {
+                System.err.println(
+                        "Error: Invalid server-to-client message.");
+                System.exit(0);
+            }
         }
     }
 }

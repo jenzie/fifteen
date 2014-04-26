@@ -35,7 +35,7 @@ public class Fifteen {
         }
 
         // Check the hostname and port number, and attempt to connect.
-        Socket socket;
+        Socket socket = null;
         try {
             socket = new Socket(host, port);
         }
@@ -53,5 +53,13 @@ public class Fifteen {
                     "Usage: java Fifteen <playerName> <host> <port>");
             System.exit(0);
         }
+
+        // Create the ModelProxy.
+        FifteenModelProxy fifteenMP = new FifteenModelProxy(socket);
+        fifteenMP.joinServer(args[0].trim());
+        fifteenMP.digitServer(1);
+        fifteenMP.digitServer(2);
+        fifteenMP.digitServer(3);
+        fifteenMP.quitServer();
     }
 }
