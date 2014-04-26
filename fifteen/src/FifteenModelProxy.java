@@ -14,14 +14,18 @@ import java.util.Scanner;
  */
 
 public class FifteenModelProxy {
-    private Socket socket;
-    private Scanner in;
-    private PrintStream out;
+    private Socket socket; // connection to the server
+    private Scanner in; // server-to-client messages
+    private PrintStream out; // client-to-server messages
 
+    /**
+     * Constructor for FifteenModelProxy.
+     * @param socket
+     */
     public FifteenModelProxy(Socket socket) {
         this.socket = socket;
 
-        // Set up the i/o for client-to-server messages.
+        // Set up the I/O (input/output) for client-to-server messages.
         try {
             this.in = new Scanner(socket.getInputStream());
             this.out = new PrintStream(socket.getOutputStream());
@@ -33,21 +37,44 @@ public class FifteenModelProxy {
         }
     }
 
+    /**
+     * Client-to-server message:
+     * join n
+     * Sent when the client starts up; n is replaced with the player's name.
+     * @param playerName username of the player.
+     */
     public void joinServer(String playerName) {
         out.println("join " + playerName);
         out.flush();
     }
 
+    /**
+     * Client-to-server message:
+     * digit d
+     * Sent when the player clicks a number button;
+     * d is replaced with the number (1 to 9).
+     * @param digit the value the player played.
+     */
     public void digitServer(int digit) {
         out.println("digit " + digit);
         out.flush();
     }
 
+    /**
+     * Client-to-server message:
+     * newgame
+     * Sent when the player clicks the New Game button.
+     */
     public void newgameServer() {
         out.println("newgame");
         out.flush();
     }
 
+    /**
+     * Client-to-server message:
+     * quit
+     * Sent when the player closes the window.
+     */
     public void quitServer() {
         out.println("quit");
         out.close();
