@@ -77,6 +77,7 @@ public class FifteenModelProxy {
      */
     public void quitServer() {
         out.println("quit");
+        out.flush();
         out.close();
         in.close();
         try {
