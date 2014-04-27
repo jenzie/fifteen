@@ -18,6 +18,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
     private Socket socket; // connection to the server
     private Scanner in; // server-to-client messages
     private PrintStream out; // client-to-server messages
+    private FifteenModelListener fifteenML;
 
     /**
      * Constructor for FifteenModelProxy.
@@ -36,6 +37,10 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
                     "Error: Connection to the given host and port failed.");
             System.exit(0);
         }
+    }
+    
+    public void setModelListener(FifteenModelListener fifteenML) {
+        this.fifteenML = fifteenML;
     }
 
     /**
@@ -79,8 +84,6 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * Sent when the player closes the window.
      */
     public void quitServer() {
-        out.println("quit");
-        out.flush();
         out.close();
         in.close();
         try {
@@ -99,18 +102,20 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
             String[] message = line.split(" ");
 
             if (message[0].equals("id")) {
+                fifteenML.setID(Integer.parseInt(message[1]));
             } else if (message[0].equals("name")) {
-
+                fifteenML.setName(Integer.parseInt(message[1]), message[2]);
             } else if (message[0].equals("digits")) {
-
+                fifteenML.setDigits(message[1]);
             } else if (message[0].equals("score")) {
-
+                fifteenML.setScore(Integer.parseInt(message[1]),
+                        Integer.parseInt(message[2]));
             } else if (message[0].equals("turn")) {
-
+                fifteenML.setTurn(Integer.parseInt(message[1]));
             } else if (message[0].equals("win")) {
-
+                fifteenML.setWin(Integer.parseInt(message[1]));
             } else if (message[0].equals("quit")) {
-
+                fifteenML.quit();
             } else {
                 System.err.println(
                         "Error: Invalid server-to-client message.");
@@ -121,16 +126,18 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
 
     @Override
     public void newgame() {
-
+        newgameServer();
     }
 
     @Override
     public void setDigit(int digit) {
-
+        digitServer(digit);
     }
 
     @Override
     public void quit() {
-
+        out.println("quit");
+        out.flush();
+        quitServer();
     }
 }

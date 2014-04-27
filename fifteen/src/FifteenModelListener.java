@@ -12,13 +12,13 @@
 public interface FifteenModelListener {
 
     // The ID of my player and the opponent in the game.
-    public void setID(int opponent);
+    public void setID(int player);
 
-    // The name of the opponent in the game.
-    public void setOpponentName(String opponent);
+    // The name of the player with the corresponding ID.
+    public void setName(int player, String name);
 
-    // The digits from 1-9 available to be played.
-    public void setDigits(int[] digits);
+    // The digits from 1-9 available (1) and unavailable (0) to be played.
+    public void setDigits(String digits);
 
     // The score of the player with the corresponding ID.
     public void setScore(int player, int score);
