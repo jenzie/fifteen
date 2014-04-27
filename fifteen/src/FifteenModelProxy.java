@@ -14,7 +14,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class FifteenModelProxy implements Runnable {
+public class FifteenModelProxy implements Runnable, FifteenViewListener {
     private Socket socket; // connection to the server
     private Scanner in; // server-to-client messages
     private PrintStream out; // client-to-server messages
@@ -117,5 +117,20 @@ public class FifteenModelProxy implements Runnable {
                 System.exit(0);
             }
         }
+    }
+
+    @Override
+    public void newgame() {
+
+    }
+
+    @Override
+    public void setDigit(int digit) {
+
+    }
+
+    @Override
+    public void quit() {
+
     }
 }

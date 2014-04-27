@@ -18,6 +18,7 @@ public class FifteenView extends JFrame implements FifteenModelListener {
 
     private static final int GAP = 10;
     private static final int COLS = 12;
+    private FifteenViewListener fifteenVL;
     private int ID;
 
     /**
@@ -151,25 +152,60 @@ public class FifteenView extends JFrame implements FifteenModelListener {
      * @param digit Digit that was clicked.
      */
     private void onDigitButton(int digit) {
-        // TBD
+        fifteenVL.setDigit(digit);
     }
 
     /**
      * Take action when the New Game button is clicked.
      */
     private void onNewGameButton() {
-        // TBD
+        fifteenVL.newgame();
     }
 
     /**
      * Take action when the Fifteen window is closing.
      */
     private void onClose() {
-        // TBD
+        fifteenVL.quit();
         System.exit(0);
     }
 
-    public setViewListener(FifteenViewListener fifteenVL) {
+    public void setViewListener(FifteenViewListener fifteenVL) {
+        this.fifteenVL = fifteenVL;
+    }
+
+    @Override
+    public void setID(int opponent) {
+
+    }
+
+    @Override
+    public void setOpponentName(String opponent) {
+
+    }
+
+    @Override
+    public void setDigits(int[] digits) {
+
+    }
+
+    @Override
+    public void setScore(int player, int score) {
+
+    }
+
+    @Override
+    public void setTurn(int player) {
+
+    }
+
+    @Override
+    public void setWin(int player) {
+
+    }
+
+    @Override
+    public void quit() {
 
     }
 }
