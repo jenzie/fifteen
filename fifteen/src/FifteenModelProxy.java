@@ -1,6 +1,4 @@
 /**
- * Proxy to the actual Model on the server.
- *
  * @author Jenny Zhen
  * date: 02.20.14
  * language: Java
@@ -14,16 +12,20 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * * Proxy to the actual Model, that is located on the server.
+ */
 public class FifteenModelProxy implements Runnable, FifteenViewListener {
-    private Socket socket; // connection to the server
+    private Socket socket; // maintains the session
     private Scanner in; // server-to-client messages
     private PrintStream out; // client-to-server messages
-    private FifteenModelListener fifteenML;
+    private FifteenModelListener fifteenML; // communicate to the view
 
     /**
      * Constructor for FifteenModelProxy.
      *
-     * @param socket
+     * @param socket maintains the session
+     * @param playerName the name of the current player
      */
     public FifteenModelProxy(Socket socket, String playerName) {
         this.socket = socket;
@@ -40,7 +42,11 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
 
         this.joinServer(playerName);
     }
-    
+
+    /**
+     * Set the model listener to communicate to the view.
+     * @param fifteenML the model listener.
+     */
     public void setModelListener(FifteenModelListener fifteenML) {
         this.fifteenML = fifteenML;
     }
@@ -98,6 +104,9 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
     }
 
     @Override
+    /**
+     * Tell the server to process inputs.
+     */
     public void run() {
         while (in.hasNextLine()) {
             String line = in.nextLine();
@@ -128,16 +137,25 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
     }
 
     @Override
+    /**
+     * Tell the server to create a new game.
+     */
     public void newgame() {
         newgameServer();
     }
 
     @Override
+    /**
+     * Tell the server to set the available digits.
+     */
     public void setDigit(int digit) {
         digitServer(digit);
     }
 
     @Override
+    /**
+     * Tell the server a player wants to quit.
+     */
     public void quit() {
         out.println("quit");
         out.flush();

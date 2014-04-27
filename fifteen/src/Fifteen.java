@@ -11,6 +11,13 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * In the game of Fifteen, two players take turns picking a number from 1 to 9.
+ * Each number can only be picked once. Each player's score is the sum of the
+ * numbers the player has picked. The game ends when one player's score is
+ * exactly 15; that player wins. Otherwise, the game ends in a draw when all
+ * numbers have been picked.
+ */
 public class Fifteen {
     public static void main(String[] args) {
         // Check command line arguments.
