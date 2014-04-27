@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
 public class Fifteen {
     public static void main(String[] args) {
         // Check command line arguments.
-        if(args.length != 3) {
+        if (args.length != 3) {
             System.err.println(
                     "Usage: java Fifteen <playerName> <host> <port>");
             System.exit(0);
@@ -25,8 +25,7 @@ public class Fifteen {
         int port = -1;
         try {
             port = Integer.parseInt(args[2].trim());
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.err.println(
                     "Error: Given port is not an integer value.");
             System.err.println(
@@ -38,15 +37,13 @@ public class Fifteen {
         Socket socket = null;
         try {
             socket = new Socket(host, port);
-        }
-        catch (UnknownHostException e) {
+        } catch (UnknownHostException e) {
             System.err.println(
                     "Error: Given host is unknown.");
             System.err.println(
                     "Usage: java Fifteen <playerName> <host> <port>");
             System.exit(0);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(
                     "Error: Connection to the given host and port failed.");
             System.err.println(
@@ -54,12 +51,9 @@ public class Fifteen {
             System.exit(0);
         }
 
-        // Create the ModelProxy.
+        // Create the ModelProxy and View.
         FifteenModelProxy fifteenMP = new FifteenModelProxy(socket);
-        fifteenMP.joinServer(args[0].trim());
-        fifteenMP.digitServer(1);
-        fifteenMP.digitServer(2);
-        fifteenMP.digitServer(3);
-        fifteenMP.quitServer();
+        FifteenView fifteenV = new FifteenView("jenny");
+        fifteenV.
     }
 }

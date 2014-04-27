@@ -14,13 +14,14 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class FifteenModelProxy implements Runnable{
+public class FifteenModelProxy implements Runnable {
     private Socket socket; // connection to the server
     private Scanner in; // server-to-client messages
     private PrintStream out; // client-to-server messages
 
     /**
      * Constructor for FifteenModelProxy.
+     *
      * @param socket
      */
     public FifteenModelProxy(Socket socket) {
@@ -30,8 +31,7 @@ public class FifteenModelProxy implements Runnable{
         try {
             this.in = new Scanner(socket.getInputStream());
             this.out = new PrintStream(socket.getOutputStream());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(
                     "Error: Connection to the given host and port failed.");
             System.exit(0);
@@ -42,6 +42,7 @@ public class FifteenModelProxy implements Runnable{
      * Client-to-server message:
      * join n
      * Sent when the client starts up; n is replaced with the player's name.
+     *
      * @param playerName username of the player.
      */
     public void joinServer(String playerName) {
@@ -54,6 +55,7 @@ public class FifteenModelProxy implements Runnable{
      * digit d
      * Sent when the player clicks a number button;
      * d is replaced with the number (1 to 9).
+     *
      * @param digit the value the player played.
      */
     public void digitServer(int digit) {
@@ -83,8 +85,7 @@ public class FifteenModelProxy implements Runnable{
         in.close();
         try {
             socket.close();
-        }
-        catch (IOException e ) {
+        } catch (IOException e) {
             System.err.println(
                     "Error: Connection to the given host and port failed.");
             System.exit(0);
@@ -93,31 +94,24 @@ public class FifteenModelProxy implements Runnable{
 
     @Override
     public void run() {
-        while(in.hasNextLine()) {
+        while (in.hasNextLine()) {
             String line = in.nextLine();
             String[] message = line.split(" ");
 
-            if(message[0].equals("id")) {
-            }
-            else if(message[0].equals("name")) {
+            if (message[0].equals("id")) {
+            } else if (message[0].equals("name")) {
 
-            }
-            else if(message[0].equals("digits")) {
+            } else if (message[0].equals("digits")) {
 
-            }
-            else if(message[0].equals("score")) {
+            } else if (message[0].equals("score")) {
 
-            }
-            else if(message[0].equals("turn")) {
+            } else if (message[0].equals("turn")) {
 
-            }
-            else if(message[0].equals("win")) {
+            } else if (message[0].equals("win")) {
 
-            }
-            else if(message[0].equals("quit")) {
+            } else if (message[0].equals("quit")) {
 
-            }
-            else {
+            } else {
                 System.err.println(
                         "Error: Invalid server-to-client message.");
                 System.exit(0);

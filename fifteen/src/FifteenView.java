@@ -169,5 +169,7 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         System.exit(0);
     }
 
+    public setViewListener(FifteenViewListener fifteenVL) {
 
+    }
 }
