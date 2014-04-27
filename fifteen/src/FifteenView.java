@@ -19,7 +19,8 @@ public class FifteenView extends JFrame implements FifteenModelListener {
     private static final int GAP = 10;
     private static final int COLS = 12;
     private FifteenViewListener fifteenVL;
-    private int ID;
+    private int myID;
+    private String theirName;
 
     /**
      * Class DigitButton provides a button labeled with a digit.
@@ -170,42 +171,72 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         System.exit(0);
     }
 
+    /**
+     * Set the view listener for the view to communicate to the model.
+     * View does not know that the model is the model.
+     * @param fifteenVL the view listener.
+     */
     public void setViewListener(FifteenViewListener fifteenVL) {
         this.fifteenVL = fifteenVL;
     }
 
     @Override
-    public void setID(int opponent) {
-
+    public void setID(int player) {
+        this.myID = player;
     }
 
     @Override
-    public void setOpponentName(String opponent) {
-
+    public void setName(int player, String name) {
+        // Check if this is our player's ID
+        if(player != this.myID) {
+            this.theirName = name;
+            this.theirScoreField.setText(name);
+        }
     }
 
     @Override
-    public void setDigits(int[] digits) {
-
+    public void setDigits(String digits) {
+        for(int i = 0; i < 9; i++) {
+            if(digits.charAt(i) == '0')
+                this.digitButton[i].available(false);
+        }
     }
 
     @Override
     public void setScore(int player, int score) {
-
+        if(player == this.myID)
+            this.myScoreField.setText(this.myName + " = " + score);
+        else
+            this.theirScoreField.setText(this.theirName + " = " + score);
     }
 
     @Override
     public void setTurn(int player) {
-
+        // If it is our turn, enable available digits.
+        if(player == this.myID) {
+            for (int i = 0; i < 9; i++) {
+                if (this.digitButton[i].available)
+                    this.digitButton[i].setEnabled(true);
+            }
+        }
+        // If it is our opponent's turn, disable all digits.
+        else {
+            for (int i = 0; i < 9; i++) {
+                this.digitButton[i].setEnabled(false);
+            }
+        }
     }
 
     @Override
     public void setWin(int player) {
-
+        if(player == this.myID)
+            this.winnerField.setText(this.myName + " wins!");
+        else
+            this.winnerField.setText(this.theirName + " wins!");
     }
 
     @Override
     public void quit() {
-
+        System.exit(0);
     }
 }

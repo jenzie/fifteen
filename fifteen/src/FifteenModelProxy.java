@@ -115,6 +115,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
             } else if (message[0].equals("win")) {
                 fifteenML.setWin(Integer.parseInt(message[1]));
             } else if (message[0].equals("quit")) {
+                quitServer();
                 fifteenML.quit();
             } else {
                 System.err.println(
