@@ -52,9 +52,11 @@ public class Fifteen {
         }
 
         // Create the ModelProxy and View, and link to the listeners.
-        FifteenModelProxy fifteenMP = new FifteenModelProxy(socket);
-        FifteenView fifteenV = new FifteenView("jenny");
+        FifteenModelProxy fifteenMP = new FifteenModelProxy(socket, args[0]);
+        FifteenView fifteenV = new FifteenView(args[0]);
         fifteenV.setViewListener(fifteenMP);
         fifteenMP.setModelListener(fifteenV);
+        Thread t = new Thread(fifteenMP);
+        t.start();
     }
 }

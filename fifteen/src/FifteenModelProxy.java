@@ -25,7 +25,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      *
      * @param socket
      */
-    public FifteenModelProxy(Socket socket) {
+    public FifteenModelProxy(Socket socket, String playerName) {
         this.socket = socket;
 
         // Set up the I/O (input/output) for client-to-server messages.
@@ -37,6 +37,8 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
                     "Error: Connection to the given host and port failed.");
             System.exit(0);
         }
+
+        this.joinServer(playerName);
     }
     
     public void setModelListener(FifteenModelListener fifteenML) {

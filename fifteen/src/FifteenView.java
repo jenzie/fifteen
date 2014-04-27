@@ -119,11 +119,13 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         myScoreField.setAlignmentX(0.5f);
         myScoreField.setEditable(false);
         myScoreField.setMaximumSize(myScoreField.getPreferredSize());
+        myScoreField.setText(this.myName);
         panel_b.add(Box.createRigidArea(new Dimension(0, GAP)));
         panel_b.add(theirScoreField = new JTextField(COLS));
         theirScoreField.setAlignmentX(0.5f);
         theirScoreField.setEditable(false);
         theirScoreField.setMaximumSize(theirScoreField.getPreferredSize());
+        theirScoreField.setText("Waiting for partner");
         panel_b.add(Box.createRigidArea(new Dimension(0, GAP)));
         panel_b.add(winnerField = new JTextField(COLS));
         winnerField.setAlignmentX(0.5f);
@@ -145,6 +147,7 @@ public class FifteenView extends JFrame implements FifteenModelListener {
             }
         });
         pack();
+        this.setVisible(true);
     }
 
     /**
@@ -191,14 +194,27 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         if(player != this.myID) {
             this.theirName = name;
             this.theirScoreField.setText(name);
+            this.newGameButton.setEnabled(true);
         }
     }
 
     @Override
     public void setDigits(String digits) {
+        boolean newgame = true;
+
+        // Set the unavailable digits.
         for(int i = 0; i < 9; i++) {
-            if(digits.charAt(i) == '0')
+            if(digits.charAt(i) == '0') {
                 this.digitButton[i].available(false);
+                newgame = false;
+            }
+        }
+
+        // If it is a new game, clean the board.
+        if(newgame) {
+            for(int i = 0; i < 9; i++)
+                this.digitButton[i].available(true);
+            this.winnerField.setText("");
         }
     }
 
@@ -212,8 +228,8 @@ public class FifteenView extends JFrame implements FifteenModelListener {
 
     @Override
     public void setTurn(int player) {
-        // If it is our turn, enable available digits.
-        if(player == this.myID) {
+        // If it is our turn/draw, enable available digits.
+        if(player == this.myID || player == 0) {
             for (int i = 0; i < 9; i++) {
                 if (this.digitButton[i].available)
                     this.digitButton[i].setEnabled(true);
@@ -229,10 +245,16 @@ public class FifteenView extends JFrame implements FifteenModelListener {
 
     @Override
     public void setWin(int player) {
-        if(player == this.myID)
+        if(player == 0)
+            this.winnerField.setText("Draw!");
+        else if(player == this.myID)
             this.winnerField.setText(this.myName + " wins!");
         else
             this.winnerField.setText(this.theirName + " wins!");
+
+        // Disable further digit input, until a new game.
+        for(int i = 0; i < 9; i++)
+            this.digitButton[i].setEnabled(false);
     }
 
     @Override
